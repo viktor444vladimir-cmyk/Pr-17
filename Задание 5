@@ -1,0 +1,41 @@
+using System;
+
+public enum EmploymentStatus { Active, OnLeave, Terminated }
+
+public class Employee
+{
+    public string Name { get; set; }
+    public DateTime? HireDate { get; set; }
+    public EmploymentStatus Status { get; set; }
+
+    public Employee(string name, DateTime? hireDate = null, EmploymentStatus status = EmploymentStatus.Active)
+    {
+        Name = name;
+        HireDate = hireDate;
+        Status = status;
+    }
+
+    public int GetYearsWorked()
+    {
+        if (!HireDate.HasValue) return -1;
+        int years = DateTime.Today.Year - HireDate.Value.Year;
+        if (DateTime.Today < HireDate.Value.AddYears(years)) years--;
+        return years;
+    }
+
+    public override string ToString() =>
+        $"{Name}, статус: {Status}, принят: {(HireDate.HasValue ? HireDate.Value.ToString("yyyy-MM-dd") : "не указан")}";
+}
+
+class Program
+{
+    static void Main()
+    {
+        var emp = new Employee("Gépp", new DateTime(2020, 3, 15), EmploymentStatus.Active);
+
+        Console.WriteLine($"emp.GetYearsWorked(): {emp.GetYearsWorked()}");
+        emp.HireDate = null;
+        Console.WriteLine($"emp.GetYearsWorked(): {emp.GetYearsWorked()}");
+        Console.WriteLine($"emp: {emp}");
+    }
+}
