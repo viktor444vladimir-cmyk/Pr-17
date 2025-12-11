@@ -1,0 +1,55 @@
+using System;
+
+[Flags]
+public enum FileAccess : byte
+{
+    None = 0,
+    Read = 1,
+    Write = 2,
+    Execute = 4,
+    ReadWrite = Read | Write,
+    All = Read | Write | Execute
+}
+
+public struct File<T> where T : Enum
+{
+    public T Permissions { get; set; }
+    public string Name { get; set; }
+
+    public File(string name, T permissions)
+    {
+        Name = name;
+        Permissions = permissions;
+    }
+
+    public bool CanRead() => Permissions is FileAccess fa && fa.HasFlag(FileAccess.Read);
+    public bool CanWrite() => Permissions is FileAccess fa && fa.HasFlag(FileAccess.Write);
+    public bool CanExecute() => Permissions is FileAccess fa && fa.HasFlag(FileAccess.Execute);
+
+    public override string ToString() => $"{Name}: {(CanRead() ? "r" : "-")}{(CanWrite() ? "w" : "-")}{(CanExecute() ? "x" : "-")}";
+}
+
+class Program
+{
+    static void Main()
+    {
+        Console.WriteLine("=== File Access System ===\n");
+
+        var f = new File<FileAccess>("test.bin", FileAccess.Read | FileAccess.Write);
+        Console.WriteLine($"File: {f}");
+        Console.WriteLine($"f.CanRead(): {f.CanRead()}");   // True
+        Console.WriteLine($"f.CanWrite(): {f.CanWrite()}"); // True
+        Console.WriteLine($"f.CanExecute(): {f.CanExecute()}"); // False
+
+        Console.WriteLine("\nOther files:");
+        var files = new File<FileAccess>[]
+        {
+            new("readonly.txt", FileAccess.Read),
+            new("script.sh", FileAccess.Read | FileAccess.Execute),
+            new("data.bin", FileAccess.All)
+        };
+
+        foreach (var file in files)
+            Console.WriteLine($"{file.Name,-15} {file}");
+    }
+}
