@@ -1,0 +1,33 @@
+using System;
+using System.Collections.Generic;
+
+class Order
+{
+    public int Id { get; set; }
+    public decimal Total { get; set; }
+
+    public override string ToString() => $"Order #{Id}: ${Total:F2}";
+}
+
+class Program
+{
+    static void Main()
+    {
+        var orders = new List<Order>
+        {
+            new Order { Id = 101, Total = 199.99m },
+            new Order { Id = 102, Total = 299.50m },
+            new Order { Id = 103, Total = 89.95m }
+        };
+
+        Console.WriteLine("Заказы:");
+        foreach (var order in orders)
+            Console.WriteLine(order);
+
+        decimal totalSum = 0;
+        foreach (var order in orders)
+            totalSum += order.Total;
+
+        Console.WriteLine($"\nОбщая сумма: ${totalSum:F2}");
+    }
+}
