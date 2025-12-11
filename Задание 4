@@ -1,0 +1,44 @@
+using System;
+
+public struct Weather
+{
+    public string City { get; set; }
+    public double? Temperature { get; set; }
+
+    public Weather(string city, double? temperature = null)
+    {
+        City = city;
+        Temperature = temperature;
+    }
+
+    public override string ToString() => Temperature == null
+        ? $"{City}: Нет данных"
+        : $"{City}: {Temperature:F1}°C";
+
+    public double GetTemperatureOrDefault(double defaultValue = -999) => Temperature ?? defaultValue;
+    public bool HasTemperature => Temperature.HasValue;
+}
+
+class Program
+{
+    static void Main()
+    {
+        var w1 = new Weather("Moscow", 22.5);
+        var w2 = new Weather("Sochi", null);
+
+        Console.WriteLine($"w1: {w1}");
+        Console.WriteLine($"w2: {w2}");
+
+        Console.WriteLine($"\nw1.Temperature ?? -999: {w1.Temperature ?? -999}");
+        Console.WriteLine($"w2.Temperature ?? -999: {w2.Temperature ?? -999}");
+
+        Weather[] weatherData = {
+            new("Moscow", 22.5),
+            new("Sochi", null),
+            new("St. Petersburg", 18.3)
+        };
+
+        Console.WriteLine("\nAll data:");
+        foreach (var w in weatherData) Console.WriteLine(w);
+    }
+}
