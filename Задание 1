@@ -1,0 +1,58 @@
+using System;
+
+public struct Color
+{
+    public int n;
+    public byte r;
+    public byte g;
+    public byte b;
+
+    public Color(byte r, byte g, byte b, int n = 0)
+    {
+        this.r = r;
+        this.g = g;
+        this.b = b;
+        this.n = n;
+    }
+
+    public string ToConsole()
+    {
+        return $"Color({r}, {g}, {b}) [n={n}]";
+    }
+
+    public string GetColorName()
+    {
+        if (r == 255 && g == 128 && b == 0) return "Red(255, 128, 0)";
+        if (r == 0 && g == 0 && b == 255) return "Blue(0, 0, 255)";
+        if (r == 0 && g == 255 && b == 0) return "Green(0, 255, 0)";
+        return $"Custom({r}, {g}, {b})";
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        Console.WriteLine("=== Использование STRUCT (тип значения) ===");
+
+        var c1 = new Color(255, 128, 0);
+        var c2 = new Color(255, 128, 0);
+
+        Console.WriteLine($"c1: {c1.ToConsole()}");
+        Console.WriteLine($"c2: {c2.ToConsole()}");
+        Console.WriteLine($"c1.GetColorName(): {c1.GetColorName()}");
+
+        c2.n = 100;
+        Console.WriteLine("\nПосле изменения c2.n = 100:");
+        Console.WriteLine($"c1.n = {c1.n}");
+        Console.WriteLine($"c2.n = {c2.n}");
+
+        Color c3 = c1;
+        c3.n = 200;
+        Console.WriteLine("\nПосле создания c3 = c1 и c3.n = 200:");
+        Console.WriteLine($"c1.n = {c1.n}");
+        Console.WriteLine($"c3.n = {c3.n}");
+
+        Console.WriteLine($"c1.Equals(c2): {c1.Equals(c2)}");
+    }
+}
